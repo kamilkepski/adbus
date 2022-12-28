@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>adBus - Dodawanie nowego ogłoszenia</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <style>
+        .error {color: red; text-align: center;}
+    </style>
+</head>
+<body class="bg-light">
+
+<header class="p-3 mb-3 border-bottom" style="background-color: #333366;">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" href="#">
+        <img th:src="@{img/logo-final.svg}" class="bi me-2" width="60" height="60" alt="">
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="/" class="nav-link px-2 link-light">Home</a></li>
+        <li><a href="#" class="nav-link px-2 disabled">Regulamin</a></li>
+        <li><a href="#" class="nav-link px-2 disabled">Kontakt</a></li>
+      </ul>
+
+
+      <div class="text-end" sec:authorize="isAnonymous()">
+        <a class="btn btn-outline-light me-2" th:href="@{/login}">Zaloguj się</a>
+        <a class="btn btn-light" th:href="@{/register}">Zarejestruj się</a>
+      </div>
+
+      <div class="dropdown text-end" sec:authorize="isAuthenticated()">
+        <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <img th:src="@{img/profile_icon.svg}" alt="mdo" width="32" height="32" class="rounded-circle">
+        </a>
+        <ul class="dropdown-menu text-small">
+          <li class="dropdown-item-text"><span sec:authentication="name"></span></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" th:href="@{/add_ad}">Dodaj ogłoszenie...</a></li>
+          <li><a class="dropdown-item" th:href="@{/my_ads}">Moje ogłoszenia</a></li>
+          <li><a class="dropdown-item active" th:href="@{/my_profile}">Mój profil</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" th:href="@{/logout}">Wyloguj się</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="max-width: 750px;">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" th:src="@{img/profile-icons.svg}" alt="" width="90" height="90">
+    <h2 style="color: #333366;">Mój profil</h2>
+    <p class="lead">Zarządzaj swoim profilem</p>
+  </div>
+
+  <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${message}">
+    <span th:text="${message}">A simple success alert—check it out!</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div>
+    <h4 class="mb-3" style="color: #333366;">Podstawowe informacje</h4>
+    <form th:action="@{/edit_profile}" method="post" th:object="${user}">
+      <div class="row g-3">
+
+        <div class="col-sm-6">
+
+          <label for="email" class="form-label">Adres email</label>
+          <input type="text" class="form-control" id="email" th:value="${user.email}" disabled>
+
+        </div>
+
+        <div class="col-sm-6 d-none d-sm-block"></div>
+
+        <div class="col-sm-6">
+          <label for="" class="form-label">Nazwa firmy</label>
+          <input type="text" class="form-control" id="" th:value="${user.companyName}" th:field="*{companyName}">
+
+        </div>
+
+        <div class="col-sm-6 d-none d-sm-block"></div>
+
+        <div class="col-sm-6">
+          <label for="brand" class="form-label">Imię</label>
+          <input type="text" class="form-control" id="brand" th:value="${user.firstName}" th:field="*{firstName}">
+        </div>
+
+        <div class="col-sm-6">
+          <label for="lastName" class="form-label">Nazwisko</label>
+          <input type="text" class="form-control" id="lastName" th:value="${user.lastName}" th:field="*{lastName}">
+        </div>
+
+      </div>
+
+      <hr class="my-4">
+      <div class="text-center">
+        <button class="w-25 btn mb-3" type="submit" style="background-color: #333366; color: #fff;">Zapisz</button>
+      </div>
+    </form>
+    
+  </div>
+</div>
+
+
+
+
+</div>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>

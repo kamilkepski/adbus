@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>adBus - Dodawanie nowego ogłoszenia</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .error {color: red; text-align: center;}
+    </style>
+</head>
+<body class="bg-light">
+
+<header class="p-3 mb-3 border-bottom" style="background-color: #333366;">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" href="#">
+                <img th:src="@{img/logo-final.svg}" class="bi me-2" width="60" height="60" alt="">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2 link-light">Home</a></li>
+                <li><a href="#" class="nav-link px-2 disabled">Regulamin</a></li>
+                <li><a href="#" class="nav-link px-2 disabled">Kontakt</a></li>
+            </ul>
+
+
+            <div class="text-end" sec:authorize="isAnonymous()">
+                <a class="btn btn-outline-light me-2" th:href="@{/login}">Zaloguj się</a>
+                <a class="btn btn-light" th:href="@{/register}">Zarejestruj się</a>
+            </div>
+
+            <div class="dropdown text-end" sec:authorize="isAuthenticated()">
+                <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img th:src="@{img/profile_icon.svg}" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small">
+                    <li class="dropdown-item-text"><span sec:authentication="name"></span></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item active" th:href="@{/add_ad}">Dodaj ogłoszenie...</a></li>
+                    <li><a class="dropdown-item" th:href="@{/my_ads}">Moje ogłoszenia</a></li>
+                    <li><a class="dropdown-item" th:href="@{/my_profile}">Mój profil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" th:href="@{/logout}">Wyloguj się</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container" style="max-width: 750px;">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" th:src="@{img/test.svg}" alt="" width="90" height="90">
+        <h2 style="color: #333366;">Dodawanie nowego ogłoszenia</h2>
+        <p class="lead">Po dodaniu ogłoszenia istnieje możliwość edytowania wprowadzonych danych w dowolnym momencie</p>
+    </div>
+
+
+
+
+        <div>
+            <h4 class="mb-3" style="color: #333366;">Podstawowe informacje</h4>
+            <form th:action="@{/process_adding_ad}" method="post" th:object="${ad}">
+                <div class="row g-3">
+
+                    <div class="col-sm-6">
+
+                        <label for="type" class="form-label">Kategoria <span class="error">*</span> </label>
+
+                        <div class="input-group">
+
+                            <select class="form-select" id="type" name="type" th:field="*{type}">
+                                <option value="" selected="selected" hidden="hidden">Wybierz</option>
+                                <option th:value="'Autobus' + ' ' + 'turystyczny'">Autobus turystyczny</option>
+                                <option th:value="Bus">Bus</option>
+                                <option th:value="'Autobus' + ' ' + 'piętrowy'">Autobus piętrowy</option>
+                                <option th:value="'Autobus' + ' ' + 'międzymiastowy'">Autobus międzymiastowy</option>
+                                <option th:value="'Autobus' + ' ' + 'miejski'">Autobus miejski</option>
+                                <option th:value="'Autobus' + ' ' + 'przegubowy'">Autobus przegubowy</option>
+                            </select>
+
+                        </div>
+
+                        <p th:if="${#fields.hasErrors('type')}" th:errorclass="error" th:errors="*{type}"></p>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">VIN</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="brand" class="form-label">Marka <span class="error">*</span></label>
+                        <input type="text" class="form-control" id="brand" th:field="*{brand}">
+                        <p th:if="${#fields.hasErrors('brand')}" th:errorclass="error" th:errors="*{brand}"></p>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Model <span class="error">*</span></label>
+                        <input type="text" class="form-control" id="lastName" th:field="*{model}">
+                        <p th:if="${#fields.hasErrors('model')}" th:errorclass="error" th:errors="*{model}"></p>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="email" class="form-label">Rok produkcji <span class="error">*</span></label>
+                        <input type="date" class="form-control" id="email" th:field="*{productionYear}">
+                        <p th:if="${#fields.hasErrors('productionYear')}" th:errorclass="error" th:errors="*{productionYear}"></p>
+                    </div>
+
+                    <div class="col-sm-6 d-none d-sm-block"></div>
+
+                    <div class="col-sm-6">
+                        <label for="address" class="form-label">Ilość miejsc <span class="error">*</span></label>
+                        <input type="text" class="form-control" id="address" th:field="*{numberOfSeats}">
+                        <p th:if="${#fields.hasErrors('numberOfSeats')}" th:errorclass="error" th:errors="*{numberOfSeats}"></p>
+                    </div>
+
+                    <div class="col-sm-6 d-none d-sm-block"></div>
+
+                    <div class="col-sm-6">
+                        <label for="address2" class="form-label">Cena <span class="error">*</span></label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="address2" value=" " th:field="*{price}">
+                            <span style="background-color: #333366; color: #fff;" class="input-group-text">PLN</span>
+                        </div>
+                        <div th:if="${#fields.hasErrors('price')}" th:errorclass="error" th:errors="*{price}"></div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <h4 class="mb-3" style="color: #333366;">Dodatkowe informacje</h4>
+
+                <div class="row g-3">
+
+                    <div class="col-sm-6">
+                        <label for="mileage" class="form-label">Przebieg</label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="mileage" th:field="*{mileage}">
+                            <span style="background-color: #333366; color: #fff;" class="input-group-text">km</span>
+
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your shipping address.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 d-none d-sm-block"></div>
+
+                    <div class="col-sm-6">
+                        <label for="enginePower" class="form-label">Moc silnika</label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="enginePower" th:field="*{enginePower}">
+                            <span style="background-color: #333366; color: #fff;" class="input-group-text">KM</span>
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your shipping address.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="engineCapacity" class="form-label">Pojemność silnika</label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="engineCapacity" th:field="*{engineCapacity}">
+                                <span style="background-color: #333366; color: #fff;" class="input-group-text">cm³</span>
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your shipping address.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+
+                        <label for="emissionStandard" class="form-label">Norma emisji spalin</label>
+
+                        <div class="input-group">
+
+                            <select class="form-select" id="emissionStandard" name="emissionStandard" th:field="*{emissionStandard}">
+                                <option value="" selected="selected" hidden="hidden">Wybierz</option>
+                                <option th:value="'Euro' + ' ' + '0'">Euro 0</option>
+                                <option th:value="'Euro' + ' ' + '1'">Euro 1</option>
+                                <option th:value="'Euro' + ' ' + '2'">Euro 2</option>
+                                <option th:value="'Euro' + ' ' + '3'">Euro 3</option>
+                                <option th:value="'Euro' + ' ' + '4'">Euro 4</option>
+                                <option th:value="'Euro' + ' ' + '5'">Euro 5</option>
+                                <option th:value="'Euro' + ' ' + '6'">Euro 6</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6 d-none d-sm-block"></div>
+
+                    <div class="col-sm-6">
+
+                        <label for="gearboxType" class="form-label">Rodzaj skrzyni biegów</label>
+
+                        <div class="input-group">
+
+                            <select class="form-select" id="gearboxType" name="gearboxType" th:field="*{gearboxType}" >
+                                <option value="" selected="selected" hidden="hidden">Wybierz</option>
+                                <option th:value="Manualna">Manualna</option>
+                                <option th:value="Automatyczna">Automatyczna</option>
+                                <option th:value="'Pół' + ' ' + 'automatyczna'">Pół automatyczna</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6 d-none d-sm-block"></div>
+
+                    <div class="col-sm-6">
+                        <label for="numberOfAxles" class="form-label">Liczba osi</label>
+                        <input type="text" class="form-control" id="numberOfAxles" th:field="*{numberOfAxles}">
+                        <div class="invalid-feedback">
+                            Please enter your shipping address.
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+                <div class="text-center">
+                    <button class="w-25 btn mb-3" type="submit" style="background-color: #333366; color: #fff;">Zapisz</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>
